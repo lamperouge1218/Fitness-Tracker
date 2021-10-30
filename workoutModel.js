@@ -4,8 +4,36 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-// Workout schema has type, name, duration, weight, reps, and sets 
-const WorkoutSchema = new Schema({});
+// Workout schema has type, name, duration, weight, reps, and sets
+const WorkoutSchema = new Schema({
+  type: {
+    type: String,
+  },
+  name: {
+    type: String,
+    required: "Please input the name of your workout",
+  },
+  duration: {
+    type: Number,
+    required: "Please input a duration",
+  },
+  weight: {
+    type: Number,
+    required: "Please input a weight value",
+  },
+  reps: {
+    type: Number,
+    required: "Please input a number of reps",
+  },
+  sets: {
+    type: Number,
+    required: "Please input a number of sets",
+  },
+  distance: {
+    type: Number,
+    required: "Please input a distance",
+  },
+});
 
 // This creates our model from the above schema, using mongoose's model method
 const Workout = mongoose.model("Workout", WorkoutSchema);
