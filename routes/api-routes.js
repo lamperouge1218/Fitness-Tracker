@@ -35,9 +35,21 @@ router.put("/api/workouts/:id", (req, res) => {
       },
     },
     {
-      new: true, // return the workout with the update
+      new: true,
     }
   )
+    .then((workout) => {
+      res.status(200).json(workout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// View combined weight on stats page
+router.get("/api/workouts/range", (req, res) => {
+  db.Workout.find()
+    .sort({ day: -1 })
     .then((workout) => {
       res.status(200).json(workout);
     })
