@@ -14,7 +14,9 @@ router.get("/api/workouts", (req, res) => {
 
 // POST new Workout
 router.post("/api/workouts", (req, res) => {
-  db.Workout.create(req.body)
+  const workout = new Workout(req.body);
+  workout.fullDuration();
+  db.Workout.create(workout)
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
@@ -60,12 +62,10 @@ router.get("/api/workouts/range", (req, res) => {
 });
 
 // View the total duration of the past seven workouts on stats page
-router.get("/api/workouts/range", (req, res) => {
-    db.Workout.aggregate([
-       $addFields: {
-           totalDuration: {}
-       } 
-    ])
-}
+// router.get("/api/workouts/range", (req, res) => {
+//     db.Workout.aggregate([
+
+//     ])
+// }
 
 module.exports = router;
