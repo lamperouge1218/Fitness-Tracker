@@ -60,10 +60,14 @@ router.get("/api/workouts/range", (req, res) => {
 });
 
 // View the total duration of the past seven workouts on stats page
-// router.get("/api/workouts/range", (req, res) => {
-//     db.Workout.aggregate([
-
-//     ])
-// }
+router.get("/api/workouts/range", (req, res) => {
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: { $sum: "$db.Workout.exercises.duration" },
+      },
+    },
+  ]);
+});
 
 module.exports = router;
