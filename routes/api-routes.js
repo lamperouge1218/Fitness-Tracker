@@ -3,7 +3,7 @@ const db = require("../models");
 
 // GET all Workouts
 router.get("/api/workouts", (req, res) => {
-  db.Workout.find()
+  db.Workout.find({})
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
@@ -46,10 +46,11 @@ router.put("/api/workouts/:id", (req, res) => {
     });
 });
 
-// View combined weight on stats page
+// View combined weight on stats page of the past seven workouts
 router.get("/api/workouts/range", (req, res) => {
   db.Workout.find()
     .sort({ day: -1 })
+    .limit(7)
     .then((workout) => {
       res.status(200).json(workout);
     })
@@ -57,5 +58,7 @@ router.get("/api/workouts/range", (req, res) => {
       res.status(400).json(err);
     });
 });
+
+// View the total duration of the past seven workouts on stats page
 
 module.exports = router;
