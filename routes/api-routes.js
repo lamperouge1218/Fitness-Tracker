@@ -2,13 +2,21 @@ const router = require("express").Router();
 const db = require("../models");
 
 // GET all Workouts
+// do aggregate function up here lol
 router.get("/api/workouts", (req, res) => {
-  db.Workout.find({})
-    .then((dbWorkout) => {
-      res.json(dbWorkout);
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: { $sum: "$exercises.duration" },
+      },
+    },
+  ])
+    .sort({ day: -1 })
+    .then((workout) => {
+      res.status(200).json(workout);
     })
     .catch((err) => {
-      res.json(err);
+      res.status(400).json(err);
     });
 });
 
@@ -60,22 +68,22 @@ router.get("/api/workouts/range", (req, res) => {
 });
 
 // View the total duration of the past seven workouts on stats page
-router.get("/api/workouts/range", (req, res) => {
-  db.Workout.aggregate([
-    {
-      $addFields: {
-        totalDuration: { $sum: `${exercises.duration}` },
-      },
-    },
-  ])
-    .sort({ day: -1 })
-    .limit(7)
-    .then((workout) => {
-      res.status(200).json(workout);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
-});
+// router.get("/api/workouts/range", (req, res) => {
+//   db.Workout.aggregate([
+//     {
+//       $addFields: {
+//         totalDuration: { $sum: "$exercises.duration" },
+//       },
+//     },
+//   ])
+//     .sort({ day: -1 })
+//     .limit(7)
+//     .then((workout) => {
+//       res.status(200).json(workout);
+//     })
+//     .catch((err) => {
+//       res.status(400).json(err);
+//     });
+// });
 
 module.exports = router;
