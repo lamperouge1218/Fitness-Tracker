@@ -4,6 +4,7 @@ const db = require("../models");
 // GET all Workouts
 // do aggregate function up here lol
 router.get("/api/workouts", (req, res) => {
+  db.Workout.find().sort({ day: -1 }).limit(1);
   db.Workout.aggregate([
     {
       $addFields: {
