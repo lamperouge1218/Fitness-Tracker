@@ -23,4 +23,27 @@ router.post("/api/workouts", (req, res) => {
     });
 });
 
+// Add an exercise to the most recent workout plan
+router.put("/api/workouts/:id", (req, res) => {
+  db.Workout.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      $push: {
+        exercises: req.body,
+      },
+    },
+    {
+      new: true, // return the workout with the update
+    }
+  )
+    .then((workout) => {
+      res.status(200).json(workout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
 module.exports = router;
