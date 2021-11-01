@@ -41,10 +41,6 @@ const WorkoutSchema = new Schema({
       },
     },
   ],
-  excercisesDuration: {
-    type: Number,
-    default: 0,
-  },
 });
 
 // This creates our model from the above schema, using mongoose's model method
