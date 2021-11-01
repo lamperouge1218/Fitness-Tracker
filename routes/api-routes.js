@@ -11,7 +11,6 @@ router.get("/api/workouts", (req, res) => {
       },
     },
   ])
-    .sort({ day: -1 })
     .then((workout) => {
       res.status(200).json(workout);
     })
@@ -56,9 +55,18 @@ router.put("/api/workouts/:id", (req, res) => {
 
 // View combined weight on stats page of the past seven workouts
 router.get("/api/workouts/range", (req, res) => {
-  db.Workout.find()
-    .sort({ day: -1 })
-    .limit(7)
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: `$exercises.duration`,
+        },
+        totalPounds: {
+          $sum: `$exercises.weight`,
+        },
+      },
+    },
+  ])
     .then((workout) => {
       res.status(200).json(workout);
     })
@@ -66,24 +74,5 @@ router.get("/api/workouts/range", (req, res) => {
       res.status(400).json(err);
     });
 });
-
-// View the total duration of the past seven workouts on stats page
-// router.get("/api/workouts/range", (req, res) => {
-//   db.Workout.aggregate([
-//     {
-//       $addFields: {
-//         totalDuration: { $sum: "$exercises.duration" },
-//       },
-//     },
-//   ])
-//     .sort({ day: -1 })
-//     .limit(7)
-//     .then((workout) => {
-//       res.status(200).json(workout);
-//     })
-//     .catch((err) => {
-//       res.status(400).json(err);
-//     });
-// });
 
 module.exports = router;
