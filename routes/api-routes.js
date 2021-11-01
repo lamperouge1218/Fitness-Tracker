@@ -64,10 +64,18 @@ router.get("/api/workouts/range", (req, res) => {
   db.Workout.aggregate([
     {
       $addFields: {
-        totalDuration: { $sum: "$db.Workout.exercises.duration" },
+        totalDuration: { $sum: "$exercises.duration" },
       },
     },
-  ]);
+  ])
+    .sort({ day: -1 })
+    .limit(7)
+    .then((workout) => {
+      res.status(200).json(workout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
 });
 
 module.exports = router;
