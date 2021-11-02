@@ -2,13 +2,35 @@ const router = require("express").Router();
 const db = require("../models");
 
 // GET all Workouts
-// do aggregate function up here lol
+// do aggregate function up here
 router.get("/api/workouts", (req, res) => {
   db.Workout.find().sort({ day: -1 }).limit(1);
   db.Workout.aggregate([
     {
       $addFields: {
         totalDuration: { $sum: "$exercises.duration" },
+      },
+    },
+  ])
+    .then((workout) => {
+      res.status(200).json(workout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// View combined weight on stats page of the past seven workouts
+router.get("/api/workouts/range", (req, res) => {
+  db.Workout.aggregate([
+    {
+      $addFields: {
+        totalDuration: {
+          $sum: `$exercises.duration`,
+        },
+        totalPounds: {
+          $sum: `$exercises.weight`,
+        },
       },
     },
   ])
@@ -46,28 +68,6 @@ router.put("/api/workouts/:id", (req, res) => {
       new: true,
     }
   )
-    .then((workout) => {
-      res.status(200).json(workout);
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
-});
-
-// View combined weight on stats page of the past seven workouts
-router.get("/api/workouts/range", (req, res) => {
-  db.Workout.aggregate([
-    {
-      $addFields: {
-        totalDuration: {
-          $sum: `$exercises.duration`,
-        },
-        totalPounds: {
-          $sum: `$exercises.weight`,
-        },
-      },
-    },
-  ])
     .then((workout) => {
       res.status(200).json(workout);
     })
