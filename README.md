@@ -11,7 +11,7 @@ Here are screenshots of the app's two primary pages:
 ![Main Page Screenshot](assets/mainpagescreenshot.PNG)
 ![Stats Page Screenshot](assets/statspagescreenshot.PNG)
 
-Here is a link to the Heroku deployment: [Fitness Tracker Heroku Deployment]()
+Here is a link to the Heroku deployment: [Fitness Tracker Heroku Deployment](https://radiant-hamlet-33556.herokuapp.com/)
 
 ## Table of Contents
 
